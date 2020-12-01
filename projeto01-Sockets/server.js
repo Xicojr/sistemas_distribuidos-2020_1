@@ -48,7 +48,7 @@ function trataRequisicoes(socket) {
     socket.on("end", function () {
         console.log("Conexão finalizada!");
     });
-    }
+    
     function ShowMenu(){
         socket.write("Bem vindo ao AirCnc! Estamos aqui para salvar sua viagem. \n");
         socket.write('###########################################')
@@ -95,7 +95,7 @@ function trataRequisicoes(socket) {
         })
         socket.write('###########################################')
         socket.write('\n')
-        socket.write('Escolha a sua acomodação digitando o código precedente. Ex: 4')
+        socket.write('Escolha a sua acomodação digitando o código precedente. Ex: R4')
         socket.write('\n')
     }
 
@@ -180,31 +180,33 @@ function trataRequisicoes(socket) {
                         quartos = novoItem[3];
                         suite = novoItem[4];
                         banheiro = novoItem[5];
-                        diaria = novoItem[6];}
+                        diaria = novoItem[6];
+                        novoImovel[`${categoria}`] = { [`${item}`]: {endereco, quartos, suite, banheiro, diaria} };
+                    }
                     else{
                         suite = novoItem[3];
                         banheiro = novoItem[4];
                         diaria = novoItem[5];
+                        novoImovel[`${categoria}`] = { [`${item}`]: {endereco, suite, banheiro, diaria} };
                     }
-                novoImovel[`${categoria}`] = { [`${item}`]: preco }
                 console.log(novoImovel);
                 Object.assign(imoveis[`${categoria}`], novoImovel[`${categoria}`]);
                 console.log(`O seguinte pedido foi adicionado com sucesso ${item}`)
                 console.log(imoveis);
             }
 
-        }
-        function comandosCliente(comando) {
-            if (comando.length == 2) {
-                decodificaPedido(comando)
+        
+            function comandosCliente(comando) {
+                if (comando.length == 2) {
+                    decodificaPedido(comando)
 
+                }
+                if (comando == 0) {
+                    finalizaPedido();
+                    socket.write('Sua conexão será finalizada em alguns instantes')
+                    socket.destroy()
+                }
             }
-            if (comando == 0) {
-                finalizaPedido();
-                socket.write('Sua conexão será finalizada em alguns instantes')
-                socket.destroy()
-            }
-        }
 
 
     });
