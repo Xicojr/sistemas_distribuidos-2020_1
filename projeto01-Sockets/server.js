@@ -22,7 +22,7 @@ let imoveis = {
 }
 
 let catalogo = imoveis;
-let operando;
+let operando = undefined;
 
 //gera o vetor que recebe a disponibilidade de cada imovel
 var disponibilidade = {};
@@ -86,6 +86,7 @@ function trataRequisicoes(socket) {
                 //console.log(item + " --> " + 'R$ ' + imoveis[categoria][item]);
                 if(categoria == Residencias){
                     socket.write(categoria[0] +`${contador} - ` + item + " --> " + 'Endereço: ' + imoveis[categoria][item].Endereco + ' Nº de Quartos: ' + imoveis[categoria][item].Quartos + ' Nº de Suites: ' + imoveis[categoria][item].Suites + ' Nº de Banheiros: ' + imoveis[categoria][item].Banheiros + ' Diária: ' + imoveis[categoria][item].Diaria);}
+                    contador = contador + 1
                 if(categoria == Quartos){
                     socket.write(categoria[0] + `${contador} - ` + item + " --> " + 'Endereço: ' + imoveis[categoria][item].Endereco + ' Suite: ' + imoveis[categoria][item].Suites + ' Banheiro: ' + imoveis[categoria][item].Banheiros + ' Diária: ' + imoveis[categoria][item].Diaria);}
                 contador = contador + 1
@@ -110,47 +111,73 @@ function trataRequisicoes(socket) {
     }
 
     function tratamentoEntrada(imovel) {
-        var dias = disponibilidade.datas[imovel];
-        for (categoria in imoveis) { //pega todas as categorias do cardápio
-            
-            if (imovel < Object.keys(Residencias).length) {
-                var item = imoveis[categoria][imovel];
-                socket.write('O ' + categoria + ' '+ Object.keys(categoria)[imovel] + ' no endereço: ' + item.Endereco + ' tem disponibilidade os seguintes dias: ' + dias);
-            }
-            else{
-                imovel = imovel - Object.keys(Residencias).length;
-                var item = imoveis[categoria][imovel];
-                socket.write('O ' + categoria + ' '+ Object.keys(categoria)[imovel] + ' no endereço: ' + item.Endereco + ' tem disponibilidade os seguintes dias: ' + dias);
-            }
-            socket.write('Caso deseje fazer o angendamento, só digitar o(s) dia(s) para qual deseja reservar sua acomodação')
+        var categoria;
+        if(imovel[0] === 'R'){
+            categoria = 'Residencias';
         }
+        if(imovel[0] === 'Q'){
+            categoria = 'Quartos';
+        }
+
+        imovel = Object.keys(catalogo[categoria][imovel[1]]);
+
+        var dias = disponibilidade.datas[disponibilidade.imovel.indexOf(imovel)];
+
+            
+        var item = imoveis[categoria][imovel];
+        socket.write('O ' + categoria + ' '+ Object.keys(categoria)[imovel] + ' no endereço: ' + item.Endereco + ' tem disponibilidade os seguintes dias: ' + dias);
+
+        socket.write('Caso deseje fazer o angendamento, só digitar o(s) dia(s) para qual deseja reservar sua acomodação separado por virgulas')
+        
 
 
     }
-    function aluguel() {
-        socket.write("            RESERVA REALIZADA")
-        socket.write('#-----------------------------------------#')
+    function aluguel(dias, acomodacao) {
+        let dias = dias.split(",");
+        let reserva = [];
+        var categoria;
 
-        socket.write('\n')
-
-        for (item in carrinho.pedido) {
-            console.log(carrinho.pedido[item])
-            socket.write(carrinho.pedido[item])
-            socket.write('\n')
+        if(acomodacao[0] === 'R'){
+            categoria = 'Residencias';
+        }
+        if(acomodacao[0] === 'Q'){
+            categoria = 'Quartos';
         }
 
+        var indice = buscarDisponibilidade(acomodacao);
+        var diasDisponiveis = disponibilidade.datas[indice];
+
+        for(var i=0; i<diasDisponiveis.length; i++) {
+            if(dias.indexOf(diasDisponiveis[i]) > -1) {
+                reserva.push(dias[i])
+                disponibilidade.datas[indice].splice(disponibilidade.datas[indice].indexOf(dias[i]), 1);
+            }
+            else{
+                socket.write('Dia ' + dias[i] + ' não disponivel para reserva.')
+            }
+        }
+
+        socket.write("            RESERVA REALIZADA")
         socket.write('#-----------------------------------------#')
         socket.write('\n')
-        socket.write('TOTAL a pagar: ' + carrinho.valor)
+
+        var valor = reserva.length * catalogo[categoria][disponibilidade.imovel[indice]].Diaria;
+
+        socket.write('#-----------------------------------------#')
+        socket.write('\n')
+        socket.write('TOTAL a pagar: ' + valor)
         socket.write('\n')
     }
 
     // código que executa quando dados são recebidos
     socket.on("data", function (dados) {
         const comando = dados.toString();
+        var acomodacao;
 
         function comandosMenu(comando) {
+            
             if(operando){
+                acomodacao = comando;
                 tratamentoEntrada(comando);
             }
             if(!operando){
@@ -167,8 +194,9 @@ function trataRequisicoes(socket) {
                 socket.write('\nCaso Casa/Apartamento: CATEGORIA, DESCRIÇÃO, ENDEREÇO, Nº DE QUARTO, Nº DE SUITES, Nº DE BANHEIROS, VALOR DA DIÁRIA');
                 socket.write('\nCaso Quarto: CATEGORIA, DESCRIÇÃO, ENDEREÇO, SUITE (Sim/Não), BANHEIRO (Compartilhado/Privativo), VALOR DA DIÁRIA');
             }
-            else{
-                aluguel(comando);
+
+            if(typeof dados === 'object'){
+                aluguel(comando, acomodacao);
             }
 
             function adcItemCatalogo(comando) {
@@ -193,19 +221,6 @@ function trataRequisicoes(socket) {
                 Object.assign(imoveis[`${categoria}`], novoImovel[`${categoria}`]);
                 console.log(`O seguinte pedido foi adicionado com sucesso ${item}`)
                 console.log(imoveis);
-            }
-
-        
-            function comandosCliente(comando) {
-                if (comando.length == 2) {
-                    decodificaPedido(comando)
-
-                }
-                if (comando == 0) {
-                    finalizaPedido();
-                    socket.write('Sua conexão será finalizada em alguns instantes')
-                    socket.destroy()
-                }
             }
 
 
