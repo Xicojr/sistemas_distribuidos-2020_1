@@ -125,7 +125,7 @@ function trataRequisicoes(socket) {
 
             
         var item = imoveis[categoria][imovel];
-        socket.write('O ' + categoria + ' '+ Object.keys(categoria)[imovel] + ' no endereço: ' + item.Endereco + ' tem disponibilidade os seguintes dias: ' + dias);
+        socket.write('O ' + categoria + ' '+ Object.keys(categoria[imovel]) + ' no endereço: ' + item.Endereco + ' tem disponibilidade os seguintes dias: ' + dias);
 
         socket.write('Caso deseje fazer o angendamento, só digitar o(s) dia(s) para qual deseja reservar sua acomodação separado por virgulas')
         
