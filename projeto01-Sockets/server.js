@@ -133,7 +133,7 @@ function trataRequisicoes(socket) {
 
     }
     function aluguel(dias, acomodacao) {
-        let dias = dias.split(",");
+        dias = dias.split(",");
         let reserva = [];
         var categoria;
 
