@@ -1,0 +1,22 @@
+{
+  "name": "sistemas_distribuidos-2020_1",
+  "version": "1.0.0",
+  "description": "Código do projeto de uma aplicação estilo AirBnb utilizando GRPC",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xicojr/sistemas_distribuidos-2020_1.git"
+  },
+  "author": "Francisco das Chagas Peres Júnior e Eddye Candido de Oliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xicojr/sistemas_distribuidos-2020_1/issues"
+  },
+  "homepage": "https://github.com/Xicojr/sistemas_distribuidos-2020_1#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
