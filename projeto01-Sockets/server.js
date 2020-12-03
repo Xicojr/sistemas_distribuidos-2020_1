@@ -42,7 +42,7 @@ for(i =0; i<disponibilidade.imovel.length; i++){
 function trataRequisicoes(socket) {
     // imprime mensagem ao conectar
     console.log("Conexão realizada!");
-    socket.write('Digite Seu Nome')
+    ShowMenu();
 
     // código que executa quando a conexão é encerrada
     socket.on("end", function () {
@@ -84,10 +84,10 @@ function trataRequisicoes(socket) {
             let contador = 0
             Object.keys(imoveis[categoria]).forEach(function (item) {
                 //console.log(item + " --> " + 'R$ ' + imoveis[categoria][item]);
-                if(categoria == Residencias){
+                if(categoria == 'Residencias'){
                     socket.write(categoria[0] +`${contador} - ` + item + " --> " + 'Endereço: ' + imoveis[categoria][item].Endereco + ' Nº de Quartos: ' + imoveis[categoria][item].Quartos + ' Nº de Suites: ' + imoveis[categoria][item].Suites + ' Nº de Banheiros: ' + imoveis[categoria][item].Banheiros + ' Diária: ' + imoveis[categoria][item].Diaria);}
                     contador = contador + 1
-                if(categoria == Quartos){
+                if(categoria == 'Quartos'){
                     socket.write(categoria[0] + `${contador} - ` + item + " --> " + 'Endereço: ' + imoveis[categoria][item].Endereco + ' Suite: ' + imoveis[categoria][item].Suites + ' Banheiro: ' + imoveis[categoria][item].Banheiros + ' Diária: ' + imoveis[categoria][item].Diaria);}
                 contador = contador + 1
                 socket.write('\n')
@@ -172,7 +172,7 @@ function trataRequisicoes(socket) {
     // código que executa quando dados são recebidos
     socket.on("data", function (dados) {
         const comando = dados.toString();
-        var acomodacao;
+        var acomodacao = 'QUALQUER';
 
         function comandosMenu(comando) {
             
@@ -195,7 +195,7 @@ function trataRequisicoes(socket) {
                 socket.write('\nCaso Quarto: CATEGORIA, DESCRIÇÃO, ENDEREÇO, SUITE (Sim/Não), BANHEIRO (Compartilhado/Privativo), VALOR DA DIÁRIA');
             }
 
-            if(typeof dados === 'object'){
+            if(typeof dados[0] == 'number'){
                 aluguel(comando, acomodacao);
             }
 
