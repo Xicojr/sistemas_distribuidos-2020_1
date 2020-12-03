@@ -1,0 +1,26 @@
+{
+  "name": "sistemas_distribuidos-2020_1",
+  "version": "1.0.0",
+  "description": "Referente ao projeto 2 REST",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xicojr/sistemas_distribuidos-2020_1.git"
+  },
+  "author": "Eddye Oliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xicojr/sistemas_distribuidos-2020_1/issues"
+  },
+  "homepage": "https://github.com/Xicojr/sistemas_distribuidos-2020_1#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
