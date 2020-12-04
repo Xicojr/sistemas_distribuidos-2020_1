@@ -7,17 +7,17 @@ for (var cont = 1; cont < 32; cont ++){
 
 let imoveis = {
     Residencias: {
-        "Apartamento no Renascença": {Endereco: "R. das Mitras, 10 - Jardim Renascença, São Luís - MA, 65075-770", Quartos: "1", Suites: "2", Banheiros: "1", Diaria: "120.80"},
-        "Apartamento na Peninsula": {Endereco: "R. Crisântemos, 158 - Ponta D'areia, São Luís - MA, 65077-355", Quartos: "2", Suites: "1", Banheiros: "1", Diaria: "110.60"},
-        "Apartamento na Cohama": {Endereco: "Rua Deputado Luís Rocha, 7 - Cohama, São Luís - MA, 65070-290", Quartos: "2", Suites: "0", Banheiros: "1", Diaria: "80.50"},
-        "Casa no Vinhais": {Endereco: "R. Santo Antônio, 640 - Recanto Vinhais, São Luís - MA, 65074-380", Quartos: "2", Suites: "2", Banheiros: "1", Diaria: "180.40"},
-        "Casa na Cohama": {Endereco: "Rua Domingos Barbosa, 50 - Cohama, São Luís - MA, 65073-460", Quartos: "2", Suites: "3", Banheiros: "2", Diaria: "200.30"},
-        "Casa no São Francisco": {Endereco: "R. Dois, 526 - São Francisco, São Luís - MA, 65076-340", Quartos: "1", Suites: "1", Banheiros: "1", Diaria: "70.50"}
+        "Apartamento no Renascença": {Endereco: "R. das Mitras, 10 - Jardim Renascença, São Luís - MA, 65075-770", Quartos: "1", Suites: "2", Banheiros: "1", Diaria: "120.80", Disponibilidade: dias},
+        "Apartamento na Peninsula": {Endereco: "R. Crisântemos, 158 - Ponta D'areia, São Luís - MA, 65077-355", Quartos: "2", Suites: "1", Banheiros: "1", Diaria: "110.60", Disponibilidade: dias},
+        "Apartamento na Cohama": {Endereco: "Rua Deputado Luís Rocha, 7 - Cohama, São Luís - MA, 65070-290", Quartos: "2", Suites: "0", Banheiros: "1", Diaria: "80.50", Disponibilidade: dias},
+        "Casa no Vinhais": {Endereco: "R. Santo Antônio, 640 - Recanto Vinhais, São Luís - MA, 65074-380", Quartos: "2", Suites: "2", Banheiros: "1", Diaria: "180.40", Disponibilidade: dias},
+        "Casa na Cohama": {Endereco: "Rua Domingos Barbosa, 50 - Cohama, São Luís - MA, 65073-460", Quartos: "2", Suites: "3", Banheiros: "2", Diaria: "200.30", Disponibilidade: dias},
+        "Casa no São Francisco": {Endereco: "R. Dois, 526 - São Francisco, São Luís - MA, 65076-340", Quartos: "1", Suites: "1", Banheiros: "1", Diaria: "70.50", Disponibilidade: dias}
     },
     Quartos: {
-        "Quarto no Vinhais": {Endereco: "R. Santo Antônio, 2 - Recanto Vinhais, São Luís - MA, 65074-380", Suite: "Não", Banheiros: "Compartilhado", Diaria: "15.40"},
-        "Quarto no Renascença": {Endereco: "Rua Domingos Barbosa - Cohama, São Luís - MA, 65073-460", Suite: "Não", Banheiros: "Compartilhado", Diaria: "28.30"},
-        "Quarto no São Francisco": {Endereco: "R. Dois, 526 - São Francisco, São Luís - MA, 65076-340", Suite: "Sim", Banheiros: "Privativo", Diaria: "50.50"}
+        "Quarto no Vinhais": {Endereco: "R. Santo Antônio, 2 - Recanto Vinhais, São Luís - MA, 65074-380", Suite: "Não", Banheiros: "Compartilhado", Diaria: "15.40", Disponibilidade: dias},
+        "Quarto no Renascença": {Endereco: "Rua Domingos Barbosa - Cohama, São Luís - MA, 65073-460", Suite: "Não", Banheiros: "Compartilhado", Diaria: "28.30", Disponibilidade: dias},
+        "Quarto no São Francisco": {Endereco: "R. Dois, 526 - São Francisco, São Luís - MA, 65076-340", Suite: "Sim", Banheiros: "Privativo", Diaria: "50.50", Disponibilidade: dias}
     }
 }
 
@@ -94,10 +94,6 @@ function trataRequisicoes(socket) {
             })
 
         })
-        socket.write('###########################################')
-        socket.write('\n')
-        socket.write('Escolha a sua acomodação digitando o código precedente. Ex: R4')
-        socket.write('\n')
     }
 
     function buscarDisponibilidade(item) {
@@ -119,15 +115,17 @@ function trataRequisicoes(socket) {
             categoria = 'Quartos';
         }
 
-        imovel = Object.keys(catalogo[categoria][imovel[1]]);
+        imovel = imovel.substring(imovel.length - 1)
 
-        var dias = disponibilidade.datas[disponibilidade.imovel.indexOf(imovel)];
+        var dias = catalogo[categoria][imovel].Disponibilidade;
 
             
         var item = imoveis[categoria][imovel];
         socket.write('O ' + categoria + ' '+ Object.keys(categoria[imovel]) + ' no endereço: ' + item.Endereco + ' tem disponibilidade os seguintes dias: ' + dias);
 
         socket.write('Caso deseje fazer o angendamento, só digitar o(s) dia(s) para qual deseja reservar sua acomodação separado por virgulas')
+
+        return item;
         
 
 
@@ -135,22 +133,14 @@ function trataRequisicoes(socket) {
     function aluguel(dias, acomodacao) {
         dias = dias.split(",");
         let reserva = [];
-        var categoria;
-
-        if(acomodacao[0] === 'R'){
-            categoria = 'Residencias';
-        }
-        if(acomodacao[0] === 'Q'){
-            categoria = 'Quartos';
-        }
 
         var indice = buscarDisponibilidade(acomodacao);
-        var diasDisponiveis = disponibilidade.datas[indice];
+        var diasDisponiveis = catalogo[Object.keys(acomodacao.categoria)][Object.keys(acomodacao.categoria.imovel)].Disponibilidade;
 
         for(var i=0; i<diasDisponiveis.length; i++) {
             if(dias.indexOf(diasDisponiveis[i]) > -1) {
                 reserva.push(dias[i])
-                disponibilidade.datas[indice].splice(disponibilidade.datas[indice].indexOf(dias[i]), 1);
+                catalogo[Object.keys(acomodacao.categoria)][Object.keys(acomodacao.categoria.imovel)].Disponibilidade.splice(catalogo[Object.keys(acomodacao.categoria)][Object.keys(acomodacao.categoria.imovel)].Disponibilidade.indexOf(dias[i]), 1);
             }
             else{
                 socket.write('Dia ' + dias[i] + ' não disponivel para reserva.')
@@ -161,7 +151,7 @@ function trataRequisicoes(socket) {
         socket.write('#-----------------------------------------#')
         socket.write('\n')
 
-        var valor = reserva.length * catalogo[categoria][disponibilidade.imovel[indice]].Diaria;
+        var valor = reserva.length * catalogo[Object.keys(acomodacao.categoria)][Object.keys(acomodacao.categoria.imovel)].Diaria;
 
         socket.write('#-----------------------------------------#')
         socket.write('\n')
@@ -177,8 +167,7 @@ function trataRequisicoes(socket) {
         function comandosMenu(comando) {
             
             if(operando){
-                acomodacao = comando;
-                tratamentoEntrada(comando);
+                acomodacao = tratamentoEntrada(comando);
             }
             if(!operando){
                 adcItemCatalogo(comando);
@@ -186,6 +175,10 @@ function trataRequisicoes(socket) {
             }if (comando == 'OP1') {
                 socket.write('\n');
                 ShowCatalogo();
+                socket.write('###########################################')
+                socket.write('\n')
+                socket.write('Escolha a sua acomodação digitando o código precedente. Ex: R4')
+                socket.write('\n')
                 operando = true;
             } if (comando == 'OP2') {
                 operando = false;

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package immobile;
+
+
+message Imovel {
+    string descricao = 1;
+    string endereco = 2;
+    int32 n_quartos = 3;
+    int32 n_suites = 4;
+    int32 n_banheiros = 5;
+    float diaria = 6;
+    repeated Posicao disponibilidade = 7;
+}
+
+message Quarto {
+    string descricao = 1;
+    string endereco = 2;
+    bool suite = 3;
+    string banheiro = 4;
+    float diaria = 5;
+    repeated Posicao disponibilidade = 6;
+}
+
+
+message Catalogo {
+    repeated Imovel imoveis = 1;
+    repeated Quarto quartos = 2;
+}
+
+message Posicao {
+    string categoria = 1;
+    int32 pos = 2;
+}
+
+message Vazia {
+}
+
+service ServicoImovel {
+    rpc ListarCatalogo (Vazia) returns (Catalogo);
+    rpc ConsultarDisponibilidade (Posicao) returns (Response);
+    rpc CadastarImovel (Imovel) returns (Vazia);
+    rpc CadastrarQuarto (Quarto) returns (Vazia);
+}
