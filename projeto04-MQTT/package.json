@@ -1,0 +1,15 @@
+{
+  "name": "projeto04-mqtt",
+  "version": "1.0.0",
+  "description": "Projeto de uma aplicação estilo AirBnb para aluguel de casas, apartamentos ou quartos. Neste projeto foi usado MQTT do Node.js.\r A aplicação envolve uma comunicação cliente servidor com as seguintes funções: \r - Cadastrar um imóvel/quarto para reserva;\r - Listar imóveis disponíveis;\r - Reservar um imóvel/quarto;\r - Ver as datas disponíveis para aluguel.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xicojr/sistemas_distribuidos-2020_1.git"
+  },
+  "author": "Francisco das Chagas Peres Júnior",
+  "license": "ISC"
+}
