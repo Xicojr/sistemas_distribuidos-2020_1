@@ -26,7 +26,8 @@ O esquema de Banco de Dados é mostrado a seguir:
 
 ## Execução do código
 
-Para se rodar essa API é necessário rodar o código 'npm run start' em um terminal dentro do repositório do mesmo. Com o server rodando, executa-se o cliente com o código 'npm run client' em um outro terminal dentro do mesmo repositório. Para se excecutar o código, basta executar uma das funções implementadas no arquivo client.js. Como por exemplo: 
+Para se rodar essa API é necessário rodar o código 'npm run start' em um terminal dentro do repositório do mesmo. Com o server rodando, executa-se o cliente com o código 'npm run client' em um outro terminal dentro do mesmo repositório. Para se excecutar o código, basta executar uma das funções implementadas no arquivo client.js.
+Como por exemplo: 
 ```
 'cadastrarAutor('nome', 'sobrenome')'
 ``` 
