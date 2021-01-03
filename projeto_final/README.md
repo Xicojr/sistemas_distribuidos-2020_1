@@ -43,4 +43,4 @@ Dentre outros
 
 Eddye Candido de Oliveira | Francisco das Chagas Peres Júnior
 --------------- | ----------------
-<img width = "200" height = "200" src = "assets/eddye.png"> | <img width = "200" height = "200" src = "assets/francisco.png">
+<img width = "250" height = "250" src = "assets/eddye.png"> | <img width = "250" height = "250" src = "assets/francisco.png">
