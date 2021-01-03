@@ -41,3 +41,5 @@ Dentre outros
 
 ## Autores
 
+Eddye Candido de Oliveira | Francisco das Chagas Peres Júnior
+<img width = "200" height = "200" src = "assets/eddye.png"> | <img width = "200" height = "200" src = "assets/francisco.png">
